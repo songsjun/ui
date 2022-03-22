@@ -58,6 +58,7 @@ export async function setupWeb3({
     } else {
       // handle EIP 1193 provider
       provider = getWeb3Provider(customProvider)
+      console.log("来自web3的provicer =", provider);
     }
     return { provider, signer }
   }

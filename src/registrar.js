@@ -62,6 +62,7 @@ function getBufferedPrice(price) {
 
 export default class Registrar {
   constructor({
+    node,
     registryAddress,
     ethAddress,
     legacyAuctionRegistrarAddress,
@@ -681,34 +682,38 @@ export default class Registrar {
   }
 }
 
-async function getEthResolver(ENS) {
-  const resolverAddr = await ENS.resolver(namehash('eth'))
+async function getEthResolver(node, ENS) {
+  const resolverAddr = await ENS.resolver(namehash(node))
   const provider = await getProvider()
   return getResolverContract({ address: resolverAddr, provider })
 }
 
-export async function setupRegistrar(registryAddress) {
+export async function setupRegistrar(node, registryAddress) {
   const provider = await getProvider()
   const ENS = getENSContract({ address: registryAddress, provider })
-  const Resolver = await getEthResolver(ENS)
+  const Resolver = await getEthResolver(node, ENS)
 
-  let ethAddress = await ENS.owner(namehash('eth'))
+  let ethAddress = await ENS.owner(namehash(node))
+
+  console.log("Resolver =", node, Resolver, ethAddress);
 
   let controllerAddress = await Resolver.interfaceImplementer(
-    namehash('eth'),
+    namehash(node),
     permanentRegistrarInterfaceId
   )
+
   let legacyAuctionRegistrarAddress = await Resolver.interfaceImplementer(
-    namehash('eth'),
+    namehash(node),
     legacyRegistrarInterfaceId
   )
 
   let bulkRenewalAddress = await Resolver.interfaceImplementer(
-    namehash('eth'),
+    namehash(node),
     bulkRenewalInterfaceId
   )
 
   return new Registrar({
+    node,
     registryAddress,
     legacyAuctionRegistrarAddress,
     ethAddress,

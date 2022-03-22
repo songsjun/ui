@@ -59,17 +59,18 @@ const contracts = {
 export class ENS {
   constructor({ networkId, registryAddress, provider }) {
     this.contracts = contracts
-    const hasRegistry =
-      this.contracts[networkId] &&
-      Object.keys(this.contracts[networkId]).includes('registry')
+    // const hasRegistry =
+    //   this.contracts[networkId] &&
+    //   Object.keys(this.contracts[networkId]).includes('registry')
 
-    if (!hasRegistry && !registryAddress) {
-      throw new Error(`Unsupported network ${networkId}`)
-    } else if (this.contracts[networkId] && !registryAddress) {
-      registryAddress = contracts[networkId].registry
-    }
+    // if (!hasRegistry && !registryAddress) {
+    //   throw new Error(`Unsupported network ${networkId}`)
+    // } else if (this.contracts[networkId] && !registryAddress) {
+    //   registryAddress = contracts[networkId].registry
+    // }
 
     this.registryAddress = registryAddress
+    console.log("this.registryAddress =", this.registryAddress);
 
     const ENSContract = getENSContract({ address: registryAddress, provider })
     this.ENS = ENSContract
