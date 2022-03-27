@@ -686,7 +686,8 @@ export default class Registrar {
 }
 
 async function getEthResolver(node, ENS) {
-  const resolverAddr = await ENS.resolver(namehash(node))
+  // const resolverAddr = await ENS.resolver(namehash(node))
+  const resolverAddr = await ENS.resolver(namehash("resolver"));
   const provider = await getProvider()
   return getResolverContract({ address: resolverAddr, provider })
 }
