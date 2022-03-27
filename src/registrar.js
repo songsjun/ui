@@ -530,7 +530,10 @@ export default class Registrar {
     } catch (e) {
       console.log({ e })
     }
+
     isDNSSECSupported = isOld || isNew
+    console.log("dnssecClaimOldId, dnssecClaimNewId =", dnssecClaimOldId, dnssecClaimNewId, parentOwner, isDNSSECSupported);
+    
     return isDNSSECSupported
   }
 
@@ -695,8 +698,6 @@ export async function setupRegistrar(node, registryAddress) {
 
   let ethAddress = await ENS.owner(namehash(node))
 
-  console.log("Resolver =", node, Resolver, ethAddress);
-
   let controllerAddress = await Resolver.interfaceImplementer(
     namehash(node),
     permanentRegistrarInterfaceId
@@ -711,6 +712,8 @@ export async function setupRegistrar(node, registryAddress) {
     namehash(node),
     bulkRenewalInterfaceId
   )
+
+  console.log("Resolver =", node, Resolver, ethAddress, "controllerAddress =", controllerAddress, "legacyAuctionRegistrarAddress =", legacyAuctionRegistrarAddress, "bulkRenewalAddress =", bulkRenewalAddress);
 
   return new Registrar({
     node,
